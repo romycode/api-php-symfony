@@ -1,0 +1,33 @@
+framework:
+    messenger:
+        serializer:
+            symfony_serializer:
+                format: json
+                context: { }
+
+        buses:
+            event.bus:
+                default_middleware: allow_no_handlers
+            command.bus:
+            query.bus:
+
+        default_bus: event.bus
+
+        # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
+        # failure_transport: failed
+
+        transports:
+            # https://symfony.com/doc/current/messenger.html#transport-configuration
+            # async: '%env(MESSENGER_TRANSPORT_DSN)%'
+            # failed: 'doctrine://default?queue_name=failed'
+            commands:
+                dsn: 'sync://'
+            queries:
+                dsn: 'sync://'
+            events:
+                dsn: 'sync://'
+                serializer: App\Shared\Infrastructure\Messaging\Serializer\EventSerializer
+
+        routing:
+        # Route your messages to the transports
+        # 'App\Message\YourMessage': async

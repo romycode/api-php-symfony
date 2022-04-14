@@ -1,0 +1,37 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    _instanceof:
+        App\Shared\Domain\Messaging\Command\CommandHandler:
+            tags: [ { name: messenger.message_handler, bus: command.bus } ]
+        App\Shared\Domain\Messaging\Query\QueryHandler:
+            tags: [ { name: messenger.message_handler, bus: query.bus } ]
+        App\Shared\Domain\Messaging\Event\EventSubscriber:
+            tags: [ { name: messenger.message_handler, bus: event.bus } ]
+        App\Shared\Infrastructure\UI\Http\Controller\Controller:
+            tags: [ "controller.service_arguments" ]
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/Kernel.php'
+
+    App\Shared\Domain\Messaging\Command\CommandBus: '@App\Shared\Infrastructure\Messaging\Symfony\MessengerCommandBus'
+    App\Shared\Domain\Messaging\Query\QueryBus: '@App\Shared\Infrastructure\Messaging\Symfony\MessengerQueryBus'
+    App\Shared\Domain\Messaging\Event\EventBus: '@App\Shared\Infrastructure\Messaging\Symfony\MessengerEventBus'
+
+    Doctrine\DBAL\Connection:
+        factory: [ App\Shared\Infrastructure\Persistence\Doctrine\DbalConnectionFactory, create ]
+        arguments: [ '%mysql_dsn%' ]
+        tags: [ { name: mysql.connection } ]
+
+    Doctrine\Migrations\DependencyFactory:
+        factory: [ App\Shared\Infrastructure\Persistence\Doctrine\MigrationsFactory, create ]
+        arguments:
+            - '%doctrine_migrations%'
+
+    Doctrine\Migrations\Tools\Console\Command\:
+        resource: '../vendor/doctrine/migrations/lib/Doctrine/Migrations/Tools/Console/Command'
+        tags: [ 'console.command' ]%

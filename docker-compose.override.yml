@@ -1,0 +1,72 @@
+version: '3'
+
+services:
+    php_fpm:
+        build:
+            context: .
+            dockerfile: docker/php-8-fpm/dev/Dockerfile
+        volumes:
+            - "./:/opt/app"
+            - "./.composer:/root/.composer"
+        depends_on:
+            - template_db
+        environment:
+            - HOST_IP=${HOST_IP}
+            - XDEBUG_MODE=${XDEBUG_MODE}
+        #command: ["/bin/sh", "/usr/local/bin/wait-for-it.sh", "mysql:3306", "--", "/usr/local/bin/init.sh"]
+        networks:
+            template_net:
+
+    webserver_nginx:
+        build:
+            context: .
+            dockerfile: docker/nginx-1.20/dev/Dockerfile
+        volumes:
+            - "./:/opt/app"
+        depends_on:
+            - php_fpm
+        ports:
+            - '8081:8081'
+        networks:
+            template_net:
+
+    php_cli:
+        container_name: template-php_cli
+        build:
+            context: .
+            dockerfile: docker/php-8-cli/dev/Dockerfile
+        volumes:
+            - "./:/opt/app"
+            - "./.composer:/root/.composer"
+        depends_on:
+            - template_db
+        environment:
+            - HOST_IP=${HOST_IP}
+            - XDEBUG_MODE=${XDEBUG_MODE}
+        #command: ["/bin/sh", "/usr/local/bin/wait-for-it.sh", "mysql:3306", "--", "/usr/local/bin/init.sh"]
+        networks:
+            template_net:
+
+    template_db:
+        container_name: template-mysql_db
+        image: mysql:8
+        restart: on-failure
+        command: --default-authentication-plugin=mysql_native_password
+        volumes:
+            - db_storage:/var/lib/mysql
+            - ./docker/mysql-8/database:/docker-entrypoint-initdb.d
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: template
+        ports:
+            - '3306:3306'
+        networks:
+            template_net:
+
+volumes:
+    db_storage:
+        name: template_db-data
+
+networks:
+    template_net:
+        name: template_net

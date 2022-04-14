@@ -1,0 +1,36 @@
+server {
+    listen ${NGINX_PHP_TEMPLATE_SERVER_PORT};
+    client_max_body_size 1m;
+
+    keepalive_timeout 5;
+
+    root ${NGINX_PHP_TEMPLATE_SERVER_ROOT};
+    index  index.php index.html index.htm;
+    server_name ${NGINX_SERVER_NAME};
+
+    include h5bp/basic.conf;
+
+    access_log /dev/stdout;
+    error_log  /dev/stderr;
+
+    location / {
+       if (${REQUEST_METHOD} = OPTIONS) {
+           include h5bp/cross-origin/requests.conf;
+           return 200;
+       }
+
+       try_files ${ESC}uri ${ESC}uri/ /index.php?${ESC}args;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass            ${NGINX_PHP_TEMPLATE_FPM_PATH}:9000;
+        fastcgi_index           index.php;
+        include                 fastcgi_params;
+        fastcgi_param           SCRIPT_FILENAME ${ESC}document_root${ESC}fastcgi_script_name;
+    }
+
+    # Deny .htaccess file access
+    location ~ /\.ht {
+        deny all;
+    }
+}

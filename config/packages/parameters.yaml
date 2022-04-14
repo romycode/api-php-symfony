@@ -1,0 +1,9 @@
+parameters:
+    mysql_dsn: '%env(resolve:DATABASE_URL)%'
+
+    doctrine_migrations:
+        ignored_tables:
+        table_storage:
+            table_name: 'migrations'
+        migrations_paths:
+            Migrations: '%kernel.project_dir%/migrations'
