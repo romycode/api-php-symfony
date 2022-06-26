@@ -10,15 +10,15 @@
         "doctrine/annotations": "^1.13",
         "doctrine/dbal": "^3.3",
         "doctrine/migrations": "^3.4",
-        "symfony/console": "6.0.*",
-        "symfony/dotenv": "6.0.*",
+        "symfony/console": "6.1.*",
+        "symfony/dotenv": "6.1.*",
         "symfony/flex": "^2",
-        "symfony/framework-bundle": "6.0.*",
-        "symfony/messenger": "6.0.*",
+        "symfony/framework-bundle": "6.1.*",
+        "symfony/messenger": "6.1.*",
         "symfony/monolog-bundle": "^3.7",
-        "symfony/runtime": "6.0.*",
-        "symfony/serializer": "6.0.*",
-        "symfony/yaml": "6.0.*"
+        "symfony/runtime": "6.1.*",
+        "symfony/serializer": "6.1.*",
+        "symfony/yaml": "6.1.*"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.6",
@@ -28,8 +28,8 @@
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^1.4",
         "phpunit/phpunit": "^9.5",
-        "symfony/browser-kit": "6.0.*",
-        "symfony/css-selector": "6.0.*",
+        "symfony/browser-kit": "6.1.*",
+        "symfony/css-selector": "6.1.*",
         "symfony/phpunit-bridge": "^6.0"
     },
     "config": {
@@ -81,7 +81,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "6.0.*"
+            "require": "6.1.*"
         }
     }
 }
