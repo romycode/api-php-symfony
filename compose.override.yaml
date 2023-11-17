@@ -1,0 +1,50 @@
+services:
+    fpm:
+        user: 1000:1000
+        build:
+            context: .
+            dockerfile: docker/php-8-fpm/dev/Dockerfile
+        volumes:
+            - "./:/opt/app"
+            - "./.composer:/root/.composer"
+        depends_on:
+            - mysql
+        environment:
+            - XDEBUG_MODE=${XDEBUG_MODE}
+        networks:
+            template.net:
+
+    nginx:
+        build:
+            context: .
+            dockerfile: docker/nginx/dev/Dockerfile
+        volumes:
+            - "./:/opt/app"
+            - "./.composer:/root/.composer"
+        depends_on:
+            - fpm
+        ports:
+            - '8081:8081'
+        networks:
+            template.net:
+
+    mysql:
+        image: mysql:8
+        restart: on-failure
+        command: --default-authentication-plugin=mysql_native_password
+        volumes:
+            - mysql-data:/var/lib/mysql
+            - ./docker/mysql-8/database:/docker-entrypoint-initdb.d
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: template
+        ports:
+            - '3306:3306'
+        networks:
+            template.net:
+
+volumes:
+    mysql-data:
+
+networks:
+    template.net:

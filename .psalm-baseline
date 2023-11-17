@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="5.15.0@5c774aca4746caf3d239d9c8cadb9f882ca29352">
+  <file src="src/Shared/Domain/Logger.php">
+    <PossiblyUnusedMethod>
+      <code>critical</code>
+      <code>info</code>
+      <code>warning</code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Shared/Domain/Messaging/Command/CommandBus.php">
+    <PossiblyUnusedMethod>
+      <code>dispatch</code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Shared/Domain/Messaging/Command/CommandHandler.php">
+    <UnusedClass>
+      <code>CommandHandler</code>
+    </UnusedClass>
+  </file>
+  <file src="src/Shared/Domain/Messaging/Event/EventBus.php">
+    <PossiblyUnusedMethod>
+      <code>publish</code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Shared/Domain/Messaging/Event/EventSubscriber.php">
+    <UnusedClass>
+      <code>EventSubscriber</code>
+    </UnusedClass>
+  </file>
+  <file src="src/Shared/Infrastructure/Messaging/Serializer/EventNameMapper.php">
+    <EmptyArrayAccess>
+      <code>self::MAP[$type]</code>
+    </EmptyArrayAccess>
+  </file>
+  <file src="src/Shared/Infrastructure/Messaging/Symfony/Stamps/CommandNameStamp.php">
+    <PossiblyUnusedProperty>
+      <code>$name</code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Shared/Infrastructure/Messaging/Symfony/Stamps/EventNameStamp.php">
+    <PossiblyUnusedProperty>
+      <code>$name</code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Shared/Infrastructure/Messaging/Symfony/Stamps/QueryNameStamp.php">
+    <PossiblyUnusedProperty>
+      <code>$name</code>
+    </PossiblyUnusedProperty>
+  </file>
+</files>

@@ -9,8 +9,6 @@ use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\ConfigurationArray;
 use Doctrine\Migrations\DependencyFactory;
 
-use function in_array;
-
 final class MigrationsFactory
 {
     public static function create(array $configuration, Connection $connection): DependencyFactory
@@ -23,7 +21,7 @@ final class MigrationsFactory
 
         $connection->getConfiguration()->setSchemaAssetsFilter(
             static function (string $table) use ($ignored_tables) {
-                return !in_array($table, $ignored_tables);
+                return !\in_array($table, $ignored_tables);
             }
         );
 

@@ -1,0 +1,12 @@
+services:
+    fpm:
+        build:
+            context: .
+            dockerfile: docker/php-8-fpm/prod/Dockerfile
+
+    nginx:
+        container_name: api-webserver_nginx
+        image: webserver_nginx
+        build:
+            context: .
+            dockerfile: docker/nginx/dev/Dockerfile

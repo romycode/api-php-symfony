@@ -1,0 +1,10 @@
+actor: FunctionalTester
+suite_namespace: Tests\Functional
+modules:
+    # enable helpers as array
+    enabled: 
+        - REST:
+            depends: Symfony
+        - Symfony:
+            app_path: 'src'
+            environment: 'test'

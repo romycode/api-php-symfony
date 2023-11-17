@@ -6,8 +6,6 @@ namespace App\Shared\Infrastructure\Persistence\Doctrine;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
-use function array_filter;
-use function preg_match;
 
 final class DbalConnectionFactory
 {
@@ -20,7 +18,7 @@ final class DbalConnectionFactory
 
     private static function parseDsn(string $dsn): array
     {
-        preg_match(
+        \preg_match(
             '/mysql:\/\/(?<user>.*):(?<password>.*)@(?<host>.*?)(?::(?<port>\d+))?(?:\/(?<dbname>.*))?$/i',
             $dsn,
             $parameters
@@ -28,6 +26,6 @@ final class DbalConnectionFactory
 
         $parameters['driver'] = 'pdo_mysql';
 
-        return array_filter($parameters, 'is_string', ARRAY_FILTER_USE_KEY);
+        return \array_filter($parameters, 'is_string', ARRAY_FILTER_USE_KEY);
     }
 }

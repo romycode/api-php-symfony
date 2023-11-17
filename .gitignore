@@ -23,3 +23,8 @@
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+###> codeception/codeception ###
+tests/_output
+###< codeception/codeception ###
+/nbproject/private/

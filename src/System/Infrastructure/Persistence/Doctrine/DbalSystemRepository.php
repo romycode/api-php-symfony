@@ -19,13 +19,11 @@ final class DbalSystemRepository implements SystemRepository
     public function getDatabaseStatus(): System
     {
         try {
-            $result = $this->connection->prepare('SELECT 1 + 1;')->executeQuery()->fetchAllAssociative();
+            $this->connection->prepare('SELECT 1 + 1;')->executeQuery()->fetchAllAssociative();
         } catch (DbalException $e) {
-            dd($e);
             $this->logger->error($e->getMessage(), $e->getTrace());
             return new System(false);
         }
-
         return new System(true);
     }
 }

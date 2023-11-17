@@ -10,12 +10,11 @@ use Symfony\Component\Messenger\Stamp\NonSendableStampInterface;
 use Symfony\Component\Messenger\Stamp\RedeliveryStamp;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Serializer\SerializerInterface as SymfonySerializer;
-use Throwable;
 
 class EventSerializer implements SerializerInterface
 {
     protected const ENCODE_FORMAT = 'json';
-    protected const STAMP_HEADER_PREFIX = 'X-Stamp-';
+    protected const STAMP_HEADER_PREFIX = 'x-stamp-';
     protected const ENVELOPE_HEADERS_KEY = 'headers';
     protected const ENVELOPE_HEADERS_TYPE_KEY = 'type';
     protected const ENVELOPE_BODY_KEY = 'body';
@@ -27,9 +26,7 @@ class EventSerializer implements SerializerInterface
     public function decode(array $encodedEnvelope): Envelope
     {
         if (empty($encodedEnvelope[self::ENVELOPE_BODY_KEY]) || empty($encodedEnvelope[self::ENVELOPE_HEADERS_KEY])) {
-            throw new MessageDecodingFailedException(
-                'Encoded envelope should have at least a "body" and some "headers".'
-            );
+            throw new MessageDecodingFailedException('Encoded envelope should have at least a "body" and some "headers".');
         }
 
         if (empty($encodedEnvelope[self::ENVELOPE_HEADERS_KEY][self::ENVELOPE_HEADERS_TYPE_KEY])) {
@@ -45,12 +42,8 @@ class EventSerializer implements SerializerInterface
                 ),
                 self::ENCODE_FORMAT
             );
-        } catch (Throwable $exception) {
-            throw new MessageDecodingFailedException(
-                sprintf('Unable to decode %s', $encodedEnvelope[self::ENVELOPE_BODY_KEY]),
-                0,
-                $exception
-            );
+        } catch (\Throwable $exception) {
+            throw new MessageDecodingFailedException(sprintf('Unable to decode %s', $encodedEnvelope[self::ENVELOPE_BODY_KEY]), 0, $exception);
         }
 
         return new Envelope($message, $stamps);
@@ -67,16 +60,19 @@ class EventSerializer implements SerializerInterface
                 ->with($lastRetryStamp);
         }
 
+        /** @var \App\Shared\Domain\Messaging\Event\Event $message */
+        $message = $envelope->getMessage();
+
         $headers = [
-                self::ENVELOPE_HEADERS_TYPE_KEY => $envelope->getMessage()->getEventName()
+                self::ENVELOPE_HEADERS_TYPE_KEY => $message->name(),
             ] + $this->encodeStamps($envelope);
 
         return [
+            self::ENVELOPE_HEADERS_KEY => $headers,
             self::ENVELOPE_BODY_KEY => $this->serializer->serialize(
                 $envelope->getMessage(),
                 self::ENCODE_FORMAT
             ),
-            self::ENVELOPE_HEADERS_KEY => $headers,
         ];
     }
 
@@ -107,7 +103,7 @@ class EventSerializer implements SerializerInterface
         $headers = [];
         foreach ($allStamps as $class => $stamps) {
             if (isset($stamps[0])) {
-                $headers[self::STAMP_HEADER_PREFIX . $class] = $this->serializer->serialize(
+                $headers[self::STAMP_HEADER_PREFIX.$class] = $this->serializer->serialize(
                     $stamps[0],
                     self::ENCODE_FORMAT
                 );

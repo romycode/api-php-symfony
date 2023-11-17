@@ -13,7 +13,7 @@ final class GetDatabaseStatusQueryHandler implements QueryHandler
     {
     }
 
-    public function __invoke(GetDatabaseStatusQuery $query): GetDatabaseStatusResponse
+    public function __invoke(GetDatabaseStatusQuery $_): GetDatabaseStatusResponse
     {
         $databaseStatus = $this->repository->getDatabaseStatus();
 
