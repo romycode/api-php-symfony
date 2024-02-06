@@ -23,7 +23,7 @@ class MessengerQueryBus implements QueryBus
     {
         try {
             $envelope = $this->queryBus->dispatch(new Envelope($query, [new QueryNameStamp($query->name())]));
-            
+
             /** @var HandledStamp $handledStamp */
             $handledStamp = $envelope->last(HandledStamp::class);
 

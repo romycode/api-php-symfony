@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\Functional;
+namespace App\Tests\Functional\System\Infrastructure\UI\Http\Controller;
 
+use App\Tests\Support\FunctionalTester;
 use Symfony\Component\HttpFoundation\Response;
-use Tests\Support\FunctionalTester;
 
 class DatabaseStatusControllerCest
 {

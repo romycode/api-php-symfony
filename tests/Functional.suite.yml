@@ -1,5 +1,5 @@
 actor: FunctionalTester
-suite_namespace: Tests\Functional
+suite_namespace: App\Tests\Functional
 modules:
     # enable helpers as array
     enabled: 

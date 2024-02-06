@@ -8,6 +8,7 @@ use Symfony\Component\Messenger\Stamp\StampInterface;
 
 class QueryNameStamp implements StampInterface
 {
-    public function __construct(public readonly string $name) {
+    public function __construct(public readonly string $name)
+    {
     }
 }

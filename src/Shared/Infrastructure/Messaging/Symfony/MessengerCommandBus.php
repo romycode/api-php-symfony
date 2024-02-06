@@ -17,7 +17,7 @@ class MessengerCommandBus implements CommandBus
     {
     }
 
-    public function dispatch(Command $command): void
+    final public function dispatch(Command $command): void
     {
         try {
             $this->commandBus->dispatch(new Envelope($command), [new CommandNameStamp($command->name())]);
