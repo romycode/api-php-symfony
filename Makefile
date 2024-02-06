@@ -46,7 +46,7 @@ test/integration:
 test/functional:
 	$(MAKE) dev/codecept/Functional
 
-test: tests/unit tests/integration tests/functional
+test: test/unit test/integration test/functional
 
 dev/bash:
 	$(COMPOSE) exec -u 1000:1000 ${API_SERVICE} bash || true

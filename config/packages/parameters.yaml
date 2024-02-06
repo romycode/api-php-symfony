@@ -1,5 +1,8 @@
 parameters:
-    mysql_dsn: '%env(resolve:DATABASE_URL)%'
+    dbal_configuration:
+        dsn: '%env(resolve:DATABASE_URL)%'
+        available_drivers:
+            mysql: 'pdo_mysql'
 
     doctrine_migrations:
         ignored_tables:

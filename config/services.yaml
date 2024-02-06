@@ -24,8 +24,8 @@ services:
 
     Doctrine\DBAL\Connection:
         factory: [ App\Shared\Infrastructure\Persistence\Doctrine\DbalConnectionFactory, create ]
-        arguments: [ '%mysql_dsn%' ]
-        tags: [ { name: mysql.connection } ]
+        arguments: [ '%dbal_configuration%' ]
+        tags: [ { name: dbal.connection } ]
 
     Doctrine\Migrations\DependencyFactory:
         factory: [ App\Shared\Infrastructure\Persistence\Doctrine\MigrationsFactory, create ]

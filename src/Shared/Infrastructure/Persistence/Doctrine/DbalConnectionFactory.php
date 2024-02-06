@@ -6,26 +6,14 @@ namespace App\Shared\Infrastructure\Persistence\Doctrine;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Tools\DsnParser;
 
 final class DbalConnectionFactory
 {
-    public static function create(string $databaseDsn): Connection
+    /** @throws Exception */
+    public static function create(array $configuration): Connection
     {
-        $parameters = self::parseDsn($databaseDsn);
-
-        return DriverManager::getConnection($parameters);
-    }
-
-    private static function parseDsn(string $dsn): array
-    {
-        \preg_match(
-            '/mysql:\/\/(?<user>.*):(?<password>.*)@(?<host>.*?)(?::(?<port>\d+))?(?:\/(?<dbname>.*))?$/i',
-            $dsn,
-            $parameters
-        );
-
-        $parameters['driver'] = 'pdo_mysql';
-
-        return \array_filter($parameters, 'is_string', ARRAY_FILTER_USE_KEY);
+        return DriverManager::getConnection((new DsnParser($configuration['available_drivers']))->parse($configuration['dsn']));
     }
 }
