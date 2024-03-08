@@ -10,7 +10,8 @@ services:
         depends_on:
             - mysql
         environment:
-            - XDEBUG_MODE=${XDEBUG_MODE}
+            XDEBUG_MODE: ${XDEBUG_MODE}
+            DOCKER_IP: host.docker.internal:host-gateway
         networks:
             template.net:
 

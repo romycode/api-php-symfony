@@ -1,6 +1,5 @@
 SHELL = /usr/bin/bash
 
-export HOST_IP := $(shell ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+')
 export COMPOSE_PROJECT_NAME = template-api
 export XDEBUG_MODE = debug
 
@@ -20,22 +19,26 @@ down:
 	$(COMPOSE) down
 
 build:
-	$(COMPOSE) build --build-arg HOST_IP=$(HOST_IP)
+	$(COMPOSE) build
 	$(MAKE) dev/composer/install
 
 build/pro:
 	$(COMPOSE_PRO) build
 
 db/migrate:
-	$(MAKE) dev/bin/console/"m:m --allow-no-migration --no-interaction --all-or-nothing"
+	$(MAKE) ENV=dev dev/bin/console/"m:m --allow-no-migration --no-interaction --all-or-nothing"
+	$(MAKE) ENV=test dev/bin/console/"m:m --allow-no-migration --no-interaction --all-or-nothing"
 
 db/new/migration:
 	$(MAKE) dev/bin/console/"m:g"
 
-db/delete:
-	$(COMPOSE) exec mysql mysql --protocol=tcp -uroot -ppassword -e 'DROP DATABASE IF EXISTS template; DROP DATABASE IF EXISTS template_test; CREATE DATABASE template; CREATE DATABASE template_test;'
+db/create:
+	$(COMPOSE) exec mysql mysql --protocol=tcp -uroot -ppassword -e 'CREATE DATABASE template; CREATE DATABASE template_test;'
 
-db/reset: db/delete db/migrate
+db/delete:
+	$(COMPOSE) exec mysql mysql --protocol=tcp -uroot -ppassword -e 'DROP DATABASE IF EXISTS template; DROP DATABASE IF EXISTS template_test;'
+
+db/reset: db/delete db/create db/migrate
 
 test/unit:
 	$(COMPOSE) run --no-deps --rm ${API_SERVICE} vendor/bin/phpunit --order-by=random --testsuite Unit
@@ -61,7 +64,7 @@ dev/format:
 	$(COMPOSE) run --no-deps --rm ${API_SERVICE} vendor/bin/php-cs-fixer --config=.php-cs-fixer.dist.php f
 
 dev/analyse:
-	$(COMPOSE) run --no-deps --rm ${API_SERVICE} vendor/bin/psalm --config=.php-cs-fixer.dist.php f
+	$(COMPOSE) run --no-deps --rm ${API_SERVICE} vendor/bin/psalm --config=psalm.xml
 
 dev/bin/console/%:
 	$(COMPOSE) run ${API_SERVICE} bin/console --env=$(ENV) $*

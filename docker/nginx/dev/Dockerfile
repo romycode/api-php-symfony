@@ -1,4 +1,5 @@
 FROM nginx:alpine
+
 RUN apk add --no-cache bash
 
 COPY ./docker/nginx/dev/rootfs /
@@ -14,4 +15,5 @@ ENV NGINX_PHP_TEMPLATE_FPM_PATH=fpm   \
     NGINX_PHP_TEMPLATE_SERVER_PORT=8081
 
 EXPOSE 8081
+
 CMD ["nginx","-g", "daemon off;"]

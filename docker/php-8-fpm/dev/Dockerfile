@@ -1,13 +1,14 @@
 FROM php:8.2-fpm-alpine
 
-ARG HOST_IP
-
-ENV XDEBUG_CONFIG="client_host=${HOST_IP}"
+ENV DOCKER_IP ""
+ENV XDEBUG_CONFIG "client_host=${DOCKER_IP}"
 
 WORKDIR /opt/app
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 COPY --from=composer/composer /usr/bin/composer /usr/local/bin/
+
+COPY ./docker/nginx/dev/rootfs /
 
 RUN mkdir -p var/cache var/logs vendor      ;\
     apk update --no-cache --quiet           ;\

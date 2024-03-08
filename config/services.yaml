@@ -27,6 +27,12 @@ services:
         arguments: [ '%dbal_configuration%' ]
         tags: [ { name: dbal.connection } ]
 
+    Doctrine\DBAL\Tools\Console\ConnectionProvider\SingleConnectionProvider: ~
+    Doctrine\DBAL\Tools\Console\ConnectionProvider: '@Doctrine\DBAL\Tools\Console\ConnectionProvider\SingleConnectionProvider'
+
+    Doctrine\DBAL\Tools\Console\Command\RunSqlCommand:
+        tags: [ 'console.command' ]
+
     Doctrine\Migrations\DependencyFactory:
         factory: [ App\Shared\Infrastructure\Persistence\Doctrine\MigrationsFactory, create ]
         arguments:
